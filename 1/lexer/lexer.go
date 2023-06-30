@@ -56,7 +56,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LT, l.ch)
 	case '!':
 		if l.peekChar() == '=' {
-			ch := l.ch
+			ch := l.ch //saveing to local var before readchar is called again so we dont lose the value of the current char
 			l.readChar()
 			literal := string(ch) + string(l.ch)
 			tok = token.Token{Type: token.NOT_EQ, Literal: literal}
@@ -94,6 +94,8 @@ func (l *Lexer) skipWhitespace() {
 	}
 }
 
+//similar to readchar but doesn't advance position of l.position and l.readPosition
+//used to look ahead in input and see what the next char is without advancing the lexer
 func (l *Lexer) peekChar() byte {
 	if l.readPosition >= len(l.input) {
 		return 0
